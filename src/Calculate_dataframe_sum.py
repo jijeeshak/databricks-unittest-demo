@@ -14,3 +14,8 @@ df = spark.createDataFrame(data, columns)
 display(df)
 display(sum_dataframe_values(df))
 
+
+# COMMAND ----------
+
+import pyspark
+print(pyspark.__version__)

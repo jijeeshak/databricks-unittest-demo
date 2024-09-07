@@ -7,10 +7,10 @@ def sum_dataframe_values(df):
 
 # COMMAND ----------
 
-df2=sum_dataframe_values(spark.range(10))
-display(df2)
 
-# COMMAND ----------
+data = [("1", 10), ("2", 20), ("3", 30)]
+columns = ["ID", "Value"]
+df = spark.createDataFrame(data, columns)
+display(df)
+display(sum_dataframe_values(df))
 
-df1=spark.range(10)
-display(df1)

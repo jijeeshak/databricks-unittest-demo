@@ -7,14 +7,30 @@
 
 # COMMAND ----------
 
+from pyspark.testing import assertDataFrameEqual
+from pyspark.sql.types import StructType, StructField, LongType, DoubleType
+
 class TestSumDataframeValues:
     #create a dataframe
+    @staticmethod
+    def create_dataframe_with_1_col():
+        data = [(3,), (7,),(10,)]
+        columns = ["Value"]
+        df = spark.createDataFrame(data, schema=columns)
+        return df
+
     @staticmethod
     def create_dataframe_with_2_cols():
         data = [("101", 1), ("201", 2), ("301", 3)]
         columns = ["ID", "Value"]
         df = spark.createDataFrame(data, schema=columns)
         return df
+
+    # Pytest unit test - scenario-0
+    def test0_sum_dataframe_values(self):
+        df = self.create_dataframe_with_1_col()
+        result = sum_dataframe_values(df.select("Value")).collect()[0][0]
+        assert result == 20, "The sum of the values should be 20"
 
     # Pytest unit test - scenario-1
     def test1_sum_dataframe_values(self):
@@ -28,9 +44,8 @@ class TestSumDataframeValues:
         result = sum_dataframe_values(df.select("Value")).collect()[0][0]
         assert result == 6, "The sum of the values should be 6"
 
+    # Pytest unit test - scenario-3
     def test3_sum_dataframe_values(self):
-        from pyspark.testing import assertDataFrameEqual
-        from pyspark.sql.types import StructType, StructField, LongType, DoubleType
         df= self.create_dataframe_with_2_cols()
         result = sum_dataframe_values(df.select("ID", "Value"))
         schemaVal = StructType([StructField("ID", DoubleType(), True), StructField("Value", LongType(), True)])    
@@ -40,6 +55,14 @@ class TestSumDataframeValues:
 # COMMAND ----------
 
 test_instance = TestSumDataframeValues()
+test_instance.test0_sum_dataframe_values()
+
+# COMMAND ----------
+
 test_instance.test1_sum_dataframe_values()
 test_instance.test2_sum_dataframe_values()
 test_instance.test3_sum_dataframe_values()
+
+# COMMAND ----------
+
+
